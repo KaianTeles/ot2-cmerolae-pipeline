@@ -316,9 +316,9 @@ Offsets ensure consistent pipetting height across plates poured with variable st
 
 Column-to-dilution mapping follows standard plating scheme:
 
-| Columns | Dilution Factor | Purpose |
-|----------|-----------------|----------|
-| 1 | Negative control (untransformed cells, pipetted manually) |
+| Columns | Dilution Factor |
+|----------|-----------------|
+| 1 | Negative control (untransformed cells, pipetted manually)|
 | 2–3 | 81× dilution |
 | 4–6 | 27× dilution |
 | 7–9 | 9× dilution |
