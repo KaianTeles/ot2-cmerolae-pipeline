@@ -8,11 +8,12 @@ All labware needs to be first calibrated using Opentrons software
 Protocol Name: Transformation_C_merolae_with_PEG4000.py
 1. OT-2 Setup
 
-Slot | Labware / Module | Description
-1 | opentrons_96_tiprack_200ul | Tip rack for P300
-2 | biorad_96_wellplate_200ul_pcr | Transformation plate
-5 | heaterShakerModuleV1 + 2mL_deepwell_plate | PEG mixing and incubation
-— | P300 Single GEN2 (right mount) | For all liquid handling
+| Slot | Labware / Module | Description |
+|------|------------------|-------------|
+| 1 | `opentrons_96_tiprack_200ul` | Tip rack for P300 |
+| 2 | `biorad_96_wellplate_200ul_pcr` | Transformation plate |
+| 5 | `heaterShakerModuleV1` + `2mL_deepwell_plate` | PEG mixing and incubation |
+| — | `P300_single_gen2` (right mount) | For all liquid handling |
 
 Hardware Requirements
 
@@ -70,13 +71,16 @@ OT-2 Script: 3X cell dilutions.py (Opentrons API v2.19)
 Purpose: Perform automated 3× serial dilutions of three transformants per 96-well plate (rows A/E/I; columns grouped 1–4, 5–8, 9–12) across up to 7 plates. The method pre-loads diluent to destination wells, then transfers a fixed volume forward to achieve ~3× dilution at each step.
 1. OT-2 Setup
 
-Slot | Labware / Module | Description
-1 | opentrons_96_tiprack_300ul | Tip rack 1
-2 | opentrons_96_tiprack_300ul | Tip rack 2
-3–9 | corning_96_wellplate_360ul_flat | Source/destination plates (up to 7)
-11 | axygen_1_reservoir_90ml | Diluent reservoir
-— | P300 Multi GEN2 (right mount) | For dilution transfers
-- Deck layout guidance & grouping logic: Three dilution series per plate start at columns 1, 5, and 9 ), spanning four columns per series (1→4, 5→8, 9→12).
+| Slot | Labware / Module | Description |
+|------|------------------|-------------|
+| 1 | `opentrons_96_tiprack_300ul` | Tip rack 1 |
+| 2 | `opentrons_96_tiprack_300ul` | Tip rack 2 |
+| 3–9 | `corning_96_wellplate_360ul_flat` | Source/destination plates (up to 7) |
+| 11 | `axygen_1_reservoir_90ml` | Diluent reservoir |
+| — | `p300_multi_gen2` (right mount) | For dilution transfers |
+
+> **Deck layout guidance:** Three dilution series per plate start at columns 1, 5, and 9 — spanning four columns per series (1→4, 5→8, 9→12).
+
 
 Hardware Requirements
 
@@ -116,10 +120,12 @@ The script performs a 4-column, 3-step 3× dilution for three series per plate:
 5. Expected Layout & Volumes
 
 For each plate (row A with multichannel):
-Series  Columns  Start vol (µL)  Diluent pre-load (µL)  Transfer (µL)  Final vol (µL)  Fold
-1       1–4      200             133                     67             200             ~3×
-2       5–8      200             133                     67             200             ~3×
-3       9–12     200             133                     67             200             ~3×
+| Series | Columns | Start vol (µL) | Diluent pre-load (µL) | Transfer (µL) | Final vol (µL) | Fold |
+|:------:|:--------:|:--------------:|:---------------------:|:--------------:|:---------------:|:----:|
+| 1 | 1–4 | 200 | 133 | 67 | 200 | ~3× |
+| 2 | 5–8 | 200 | 133 | 67 | 200 | ~3× |
+| 3 | 9–12 | 200 | 133 | 67 | 200 | ~3× |
+
 
 6. Post-Run Handling
 
@@ -134,12 +140,14 @@ Purpose: Automate the pouring of starch-based plating medium across up to 8 plat
 
 1.OT-2 Setup
 
-Slot | Labware / Module | Description
-1 | heaterShakerModuleV1 + agilent_1_reservoir_290ml | Contains 25 mL 20% starch solution
-3, 5–11 | corning_96_wellplate_360ul_flat | Destination plates (up to 8)
-4 | opentrons_96_tiprack_20ul | Tip rack
-— | P20 Multi GEN2 (left mount) | Dispensing starch
-— | HEPA Filter Attachment | Turn ON during pouring
+| Slot | Labware / Module | Description |
+|------|------------------|-------------|
+| 1 | `heaterShakerModuleV1` + `agilent_1_reservoir_290ml` | Contains 25 mL 20% starch solution |
+| 3, 5–11 | `corning_96_wellplate_360ul_flat` | Destination plates (up to 8) |
+| 4 | `opentrons_96_tiprack_20ul` | Tip rack |
+| — | `p20_multi_gen2` (left mount) | Dispensing starch |
+| — | HEPA Filter Attachment | Turn ON during pouring |
+
 
 Hardware Requirements
 
@@ -252,17 +260,19 @@ The diluted *C. merolae* cultures should be positioned in slots 3 and 4 of the O
 
 2. OT-2 Setup
 
-Slot | Labware / Module | Description
-1 | opentrons_96_tiprack_20ul | Tip rack #1 (P20)
-2 | opentrons_96_tiprack_20ul | Tip rack #2 (backup)
-3 | corning_96_wellplate_360ul_flat | Source plate #1 (diluted cells)
-4 | corning_96_wellplate_360ul_flat | Source plate #2 (optional)
-5–7 | corning_96_wellplate_360ul_flat | Destination plates (for source 3)
-8–10 | corning_96_wellplate_360ul_flat | Destination plates (for source 4)
-11 | opentrons_96_tiprack_200ul | Tip rack for P300 mixing
-— | P20 Multi GEN2 (left mount) | Dispensing cell aliquots
-— | P300 Multi GEN2 (right mount) | Mixing before plating
-— | HEPA Filter Attachment | Maintain sterile airflow
+| Slot | Labware / Module | Description |
+|------|------------------|-------------|
+| 1 | `opentrons_96_tiprack_20ul` | Tip rack #1 (P20) |
+| 2 | `opentrons_96_tiprack_20ul` | Tip rack #2 (backup) |
+| 3 | `corning_96_wellplate_360ul_flat` | Source plate #1 (diluted cells) |
+| 4 | `corning_96_wellplate_360ul_flat` | Source plate #2 (optional) |
+| 5–7 | `corning_96_wellplate_360ul_flat` | Destination plates (for source 3) |
+| 8–10 | `corning_96_wellplate_360ul_flat` | Destination plates (for source 4) |
+| 11 | `opentrons_96_tiprack_200ul` | Tip rack for P300 mixing |
+| — | `p20_multi_gen2` (left mount) | Dispensing cell aliquots |
+| — | `p300_multi_gen2` (right mount) | Mixing before plating |
+
+
 
 Hardware Requirements
 
