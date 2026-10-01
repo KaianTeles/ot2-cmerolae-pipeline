@@ -39,18 +39,17 @@ Bio-Rad PCR Plate (Slot 2) – Reaction plate for transformation
 - Dispense 25 µL of the resuspended cells into the first column of each group.
 - Cover the plate with parafilm and incubate at room temperature or in a 42°C incubator until ready to proceed.
 
-- In the third column of each group, add 200 µL of PEG4000 (0.9g of PEG4000 in 750uL of MA-I) solution diluted in 1X MA I.
+- In the second column of each group, add 200 µL of PEG4000 (0.9g of PEG4000 in 750uL of MA-I) solution diluted in 1X MA I.
 
-- In the second column of each group, prepare the transformation mix as follows (final volume: 100 µL):
-  - 1 pmol of target DNA
-  - 6 µL of salmon sperm DNA
+- In the first column of each group when protocol is ready to run, prepare the transformation mix as follows (final volume: 100 µL):
+  - 2 pmol of target DNA
   - 10 µL of 10X MA I
   - Add nuclease-free water to reach 100 µL total volume.
 
 3. Dilution Reservoir Setup
 
 - Assemble the heater-shaker module with the metal adapter and a 2 mL deep-well plate in position 5.
-- Add 1 mL of MA2G medium to each well in the first column of the deep-well plate: position 1 for group 1, position 4 for group 2, position 7 for group 3, and position 10 for group
+- Add 1 mL of MA2G medium to each well in the third column of the deep-well plate: position 3 for group 1, position 6 for group 2, position 9 for group 3, and position 12 for group 4
 
 
 4. Running the OT-2 Protocol
