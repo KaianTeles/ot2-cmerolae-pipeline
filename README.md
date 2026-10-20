@@ -1,5 +1,5 @@
 # ot2-cmerolae-pipeline
-This repository contains Python protocols for the Opentrons OT-2 liquid handler automating Cyanidioschyzon merolae nuclear transformations. The workflow includes automated starch-bed pouring with real-time Z-offset calibration, PEG-mediated transformation routines, and colony plating compatible with the PIXL picker.
+This repository contains Python protocols for the Opentrons OT-2 liquid handler automating Cyanidioschyzon merolae nuclear transformations. The workflow includes automated starch-bed pouring with real-time Z-offset calibration, PEG-mediated transformation routines, and colony plating.
 
 All labware needs to be first calibrated using Opentrons software
 
@@ -11,7 +11,6 @@ Protocol Name: Transformation_C_merolae_with_PEG4000.py
 | Slot | Labware / Module | Description |
 |------|------------------|-------------|
 | 1 | `opentrons_96_tiprack_200ul` | Tip rack for P300 |
-| 2 | `biorad_96_wellplate_200ul_pcr` | Transformation plate |
 | 5 | `heaterShakerModuleV1` + `2mL_deepwell_plate` | PEG mixing and incubation |
 | — | `P300_single_gen2` (right mount) | For all liquid handling |
 
