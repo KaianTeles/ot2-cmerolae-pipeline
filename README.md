@@ -371,67 +371,81 @@ Users can define the number of destination plates (3 or 6) and the number of dil
 # For Colony PCR Screening with Duplicate Reactions
 
 *C. merolae* Colony PCR Protocol
-Protocol Name: PCR Colony Picks with Replication for two plates
-OT-2 Script: ColonyPCRfullplate2x.py (Opentrons API v2.19)
+Protocol Name: PCR Colony Picks with Replication
+OT-2 Script: ColonyPCR.py (Opentrons API v2.19)
 Custom Labware: abgenepcr_96_wellplate_200ul.json
-Purpose: Automate the assembly of 192 colony PCR reactions from a single 96-well plate of colony picks, splitting each pick into two reactions so that every transformant is screened with a left-junction and a right-junction primer pair in the same run. Output is two Abgene 96-well PCR plates ready for thermocycling.
+Purpose: Automate the assembly of colony PCR reactions from a plate of colony picks, splitting each pick into two reactions so that every transformant is screened with a left-junction and a right-junction primer pair in the same run. Output is one or two Abgene 96-well PCR plates ready for thermocycling.
 
 1. Overview
 
-This protocol is executed after colony picking, and follows the four-group layout used in the "PEG4000 transformation" protocol. The 96 colony picks in the source plate are divided into four groups of three columns, and each group is screened with its own Left and Right primer-pair mastermix. Each colony therefore produces two 10 µL reactions, distributed across two destination plates.
+This protocol is executed after colony picking, and follows the same group layout as the "PEG4000 transformation" protocol. Colony picks in the source plate are divided into groups of three columns, and each group is screened with its own Left and Right primer-pair mastermix. Each colony therefore produces two 10 µL reactions.
 
-| Transformation group | Source columns | Destination |
-|----------------------|----------------|-------------|
-| Group 1 | 1–3 | Plate 1, columns 1–3 (Left) and 4–6 (Right) |
-| Group 2 | 4–6 | Plate 1, columns 7–9 (Left) and 10–12 (Right) |
-| Group 3 | 7–9 | Plate 2, columns 1–3 (Left) and 4–6 (Right) |
-| Group 4 | 10–12 | Plate 2, columns 7–9 (Left) and 10–12 (Right) |
+| Transformation group | Source columns | Mastermix columns | Destination |
+|----------------------|----------------|-------------------|-------------|
+| Group 1 | 1–3 | 1 (Left), 2 (Right) | Plate 1, columns 1–3 and 4–6 |
+| Group 2 | 4–6 | 3 (Left), 4 (Right) | Plate 1, columns 7–9 and 10–12 |
+| Group 3 | 7–9 | 5 (Left), 6 (Right) | Plate 2, columns 1–3 and 4–6 |
+| Group 4 | 10–12 | 7 (Left), 8 (Right) | Plate 2, columns 7–9 and 10–12 |
 
-2. OT-2 Setup
+2. Run Parameters
+
+The number of groups is selected in the Opentrons App before the run. Two groups fill one destination plate, so the group count also sets how much labware goes on the deck:
+
+| Groups | Source columns used | Destination plates | Tip racks | Reactions |
+|:------:|:-------------------:|:------------------:|:---------:|:---------:|
+| 1 | 1–3 | 1 (slot 3, half filled) | 1 (slot 1) | 48 |
+| 2 | 1–6 | 1 (slot 3, full) | 1 (slot 1) | 96 |
+| 3 | 1–9 | 2 (slots 3 and 5) | 2 (slots 1 and 4) | 144 |
+| 4 | 1–12 | 2 (slots 3 and 5) | 2 (slots 1 and 4) | 192 |
+
+Each group consumes five tip columns — three for cells, two for mastermix — so the second tip rack is only loaded from three groups onward. Slots 4 and 5 are left empty below that, and the protocol does not ask for them to be calibrated.
+
+3. OT-2 Setup
 
 | Slot | Labware / Module | Description |
 |------|------------------|-------------|
 | 1 | `opentrons_96_tiprack_20ul` | Tip rack #1 (P20) |
 | 2 | `biorad_96_wellplate_200ul_pcr` | Source plate — colony picks |
 | 3 | `abgenepcr_96_wellplate_200ul` | Destination plate #1 (custom labware) |
-| 4 | `opentrons_96_tiprack_20ul` | Tip rack #2 (P20) |
-| 5 | `abgenepcr_96_wellplate_200ul` | Destination plate #2 (custom labware) |
-| 6 | `biorad_96_wellplate_200ul_pcr` | Mastermix plate — columns 1–8 |
+| 4 | `opentrons_96_tiprack_20ul` | Tip rack #2 (P20) — three or four groups only |
+| 5 | `abgenepcr_96_wellplate_200ul` | Destination plate #2 — three or four groups only |
+| 6 | `biorad_96_wellplate_200ul_pcr` | Mastermix plate — two columns per group |
 | — | `p20_multi_gen2` (left mount) | All liquid handling |
 
 Hardware Requirements
 
 Opentrons OT-2 (API v2.19+) – Automated reaction assembly
 P20 Multi GEN2 (left mount) – Cell and mastermix transfers
-Tip Racks 20 µL (×2, Slots 1 and 4) – 20 tip columns consumed per run
+Tip Racks 20 µL (×1 or ×2, Slots 1 and 4) – Five tip columns per group
 Bio-Rad PCR Plate (Slot 2) – Colony picks resuspended in water or MA2G
-Bio-Rad PCR Plate (Slot 6) – Eight primer-pair mastermixes
-Abgene PCR Plates (×2, Slots 3 and 5) – Destination reaction plates
+Bio-Rad PCR Plate (Slot 6) – Primer-pair mastermixes, two columns per group
+Abgene PCR Plates (×1 or ×2, Slots 3 and 5) – Destination reaction plates
 Thermocycler – Downstream, off-deck
 
-3. Custom Labware Installation
+4. Custom Labware Installation
 
 The Abgene destination plates are not part of the Opentrons default library and must be added before the protocol will load.
 
   1. Download `abgenepcr_96_wellplate_200ul.json` from this repository.
   2. In the Opentrons App, go to Labware → Import, and select the JSON file.
   3. Confirm the entry "Abgene PCR 96 Well Plate 200 µL" appears in the custom labware list.
-  4. Calibrate the labware in slots 3 and 5 before the first run.
+  4. Calibrate the labware in slot 3, and in slot 5 as well if running three or four groups, before the first run.
 
 The definition describes a 96-well V-bottom plate, 200 µL per well, 20.5 mm well depth. The `loadName` inside the JSON is `abgenepcr_96_wellplate_200ul`, which is the string the protocol calls — renaming the file does not change it.
 
-4. Reagent and Sample Preparation (Manual)
+5. Reagent and Sample Preparation (Manual)
 
 Source plate (slot 2)
 
-- Pick single colonies from selective starch plates into the corresponding well of the Bio-Rad plate.
+- Pick single colonies from selective starch plates into the corresponding well of the Bio-Rad plate, filling three columns per group from column 1 onward.
 - Resuspend each pick in 30–50 µL of nuclease-free water or MA2G. The protocol mixes 5 × 10 µL before aspirating, so wells must hold at least 30 µL.
 - Keep the plate on ice or at room temperature until the run starts.
 
 Mastermix plate (slot 6)
 
-- Prepare eight PCR mastermixes at 1.11× concentration, so that 9 µL plus 1 µL of cell suspension gives a 10 µL reaction at 1×.
+- Prepare two PCR mastermixes per group at 1.11× concentration, so that 9 µL plus 1 µL of cell suspension gives a 10 µL reaction at 1×.
 - Load each mastermix across all eight wells of one column, 35–40 µL per well. Each column is aspirated three times at 9 µL, so 27 µL per well is consumed and the remainder covers dead volume.
+- Fill only the columns the selected group count uses; the rest stay empty.
 
 | Mastermix column | Contents | Destination |
 |------------------|----------|-------------|
@@ -444,47 +458,49 @@ Mastermix plate (slot 6)
 | 7 | Group 4 — Left homology primer pair | Plate 2, columns 7–9 |
 | 8 | Group 4 — Right homology primer pair | Plate 2, columns 10–12 |
 
-5. What the Protocol Does (Automated Steps)
+6. What the Protocol Does (Automated Steps)
 
-Cells are dispensed first, into the empty destination wells, and the mastermix is added on top.
+All cells are dispensed first, into the empty destination wells, and the mastermix is added on top afterwards. The tip serving a source column visits two destination columns that carry different mastermixes, so cells cannot be dispensed into mastermix without carrying one primer pair into the other's wells. That is why the order is fixed.
 
-  1. Cell distribution — for each of the 12 source columns:
+  1. Cell distribution — for each source column in the selected groups:
    - Mix 5 × 10 µL at 1 mm from the well bottom to resuspend the pick.
    - Aspirate 2 µL at 1 mm from the bottom.
    - Dispense 1 µL into the first destination column, at 0.1 mm from the bottom.
    - Dispense 1 µL into the paired destination column, at 0.1 mm from the bottom.
-   - Drop the tip. One tip per source column, 12 tip columns total.
-  2. Mastermix distribution — for each of the eight mastermixes:
+   - Drop the tip. One tip column per source column, three per group.
+  2. Mastermix distribution — for each mastermix in the selected groups:
    - Pick up one tip.
    - Aspirate 9 µL and dispense into each of its three destination columns at 12 mm from the bottom, so the tip never touches the cell droplet.
    - Blow out twice and touch tip after each dispense.
-   - Drop the tip. One tip per mastermix, 8 tip columns total.
+   - Drop the tip. One tip column per mastermix, two per group.
 
 Final reaction volume is 10 µL: 9 µL mastermix plus 1 µL cell suspension.
 
-6. Expected Layout and Volumes
+7. Expected Layout and Volumes
 
 | Item | Value |
 |------|-------|
-| Colony picks processed | 96 |
-| Reactions assembled | 192 (2 per colony) |
+| Colony picks processed | 24 per group |
+| Reactions assembled | 48 per group (2 per colony) |
 | Reaction volume | 10 µL |
 | Cell suspension per reaction | 1 µL |
 | Mastermix per reaction | 9 µL |
 | Mastermix consumed per column | 27 µL per well |
-| Tip columns consumed | 20 (12 cells + 8 mastermix) |
+| Tip columns consumed | 5 per group (3 cells + 2 mastermix) |
 
-7. Running the OT-2 Protocol
+8. Running the OT-2 Protocol
 
-  1. Load both tip racks, the source plate, the mastermix plate and the two Abgene plates as in Section 2.
-  2. Confirm that the custom labware is imported and calibrated for slots 3 and 5.
-  3. Load the mastermix plate last, immediately before starting, to limit time at room temperature.
-  4. Start the run. No run parameters are exposed — the protocol always processes the full 96-well source plate.
-  5. The run consumes 20 tip columns, so both racks must be full at the start.
+  1. Load the deck as in Section 3, leaving out the labware the selected group count does not use.
+  2. Confirm that the custom labware is imported and calibrated for the destination slots in use.
+  3. In the Opentrons App, select Number of Groups (`group_count`, default 4, max 4).
+  4. Load the mastermix plate last, immediately before starting, to limit time at room temperature.
+  5. Start the run. Tip racks must be full at the start.
 
-8. Post-Run Handling
+Cells sit as exposed 1 µL droplets until the mastermix step reaches their column, which at four groups is several minutes after the first colonies are dispensed. If evaporation is a concern, run fewer groups per batch or keep the destination plate on a chilled block.
 
-- Seal both destination plates, spin down briefly to collect the reactions and remove bubbles.
+9. Post-Run Handling
+
+- Seal the destination plates, spin down briefly to collect the reactions and remove bubbles.
 - Transfer to the thermocycler and run the cycling program for the primer pairs in use.
 - A left-junction and a right-junction product for the same colony indicates integration at the intended locus; a single product indicates one-sided integration or a non-specific product.
 - Analyse by gel electrophoresis, keeping the plate map from Section 1 to trace each well back to its colony.
