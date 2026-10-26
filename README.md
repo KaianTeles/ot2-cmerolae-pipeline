@@ -438,7 +438,7 @@ The definition describes a 96-well V-bottom plate, 200 µL per well, 20.5 mm wel
 Source plate (slot 2)
 
 - Pick single colonies from selective starch plates into the corresponding well of the Bio-Rad plate, filling three columns per group from column 1 onward.
-- Resuspend each pick in 30–50 µL of nuclease-free water or MA2G. The protocol mixes 5 × 10 µL before aspirating, so wells must hold at least 30 µL.
+- Resuspend each pick in 50 µL of nuclease-free water. The protocol mixes 5 × 10 µL before aspirating, so wells must hold at least 30 µL.
 - Keep the plate on ice or at room temperature until the run starts.
 
 Mastermix plate (slot 6)
