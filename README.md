@@ -165,7 +165,7 @@ The starting well of each series ends at 133 µL, since 67 µL is removed and no
 
 *C. merolae* Starch-Bed Pouring Protocol
 Protocol Name: Starch Solution Dispensing with Z-offset Adjustment
-OT-2 Script: Startch plating.py (Opentrons API v2.19)
+OT-2 Script: Starch plating.py (Opentrons API v2.19)
 Purpose: Automate the pouring of starch-based plating medium across up to 8 plates using plate-weight–dependent Z-axis height calibration. This ensures even distribution and prevents premature solidification due to the high viscosity and fast-gelling nature of starch-gellan mixtures.
 
 1. OT-2 Setup
@@ -273,7 +273,7 @@ Each calculated Z-offset compensates for height variation from plate to plate, e
 
 *C. merolae* Cell Plating on Starch Protocol
 Protocol Name: Cell plating on Starch
-OT-2 Script: CellPlatingOnStartch.py (Opentrons API v2.19)
+OT-2 Script: CellPlatingOnStarch.py (Opentrons API v2.19)
 Purpose: Automate the plating of diluted *C. merolae* cells onto starch-containing solid media plates following the "3X Cell Dilution Protocol." The script uses weight-based Z-offset calibration to ensure even plating height across up to six destination plates.
 
 1. Overview
