@@ -348,7 +348,6 @@ Column-to-dilution mapping follows the standard plating scheme:
 | 7–9 | 2 (or 6, 10) | 3× dilution |
 | 10–12 | 1 (or 5, 9) | neat |
 
-Dilution factors count the initial resuspension in MA2G as the first 3× step, so the starting well of each dilution series is already at 3×.
 
 Each destination plate receives the full dilution range from its respective source plate.
 
