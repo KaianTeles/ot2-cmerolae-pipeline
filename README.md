@@ -343,10 +343,10 @@ Column-to-dilution mapping follows the standard plating scheme:
 | Destination columns | Source column | Dilution factor |
 |---------------------|---------------|-----------------|
 | 1 | — | Negative control (untransformed cells, pipetted manually) |
-| 2–3 | 4 (or 8, 12) | 81× dilution |
-| 4–6 | 3 (or 7, 11) | 27× dilution |
-| 7–9 | 2 (or 6, 10) | 9× dilution |
-| 10–12 | 1 (or 5, 9) | 3× dilution |
+| 2–3 | 4 (or 8, 12) | 27× dilution |
+| 4–6 | 3 (or 7, 11) | 9× dilution |
+| 7–9 | 2 (or 6, 10) | 3× dilution |
+| 10–12 | 1 (or 5, 9) | neat |
 
 Dilution factors count the initial resuspension in MA2G as the first 3× step, so the starting well of each dilution series is already at 3×.
 
@@ -360,7 +360,7 @@ Users can define the number of destination plates (3 or 6) and the number of dil
 
 - Even distribution of cell spots across all destination plates.
 - Uniform Z-height for deposition, minimizing pipette contact with starch surface.
-- Clearly distinguishable dilution gradients (3× to 81×).
+- Clearly distinguishable dilution gradients (neat to 27×).
 
 8. Post-Run Handling
 
