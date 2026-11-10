@@ -33,7 +33,7 @@ def run(protocol: protocol_api.ProtocolContext):
     
     # Plates and reservoir
     plates = [
-        protocol.load_labware('corning_96_wellplate_360ul_flat', str(i))
+        protocol.load_labware('nest_96_wellplate_200ul_flat', str(i))
         for i in range(3, 3 + num_plates)
     ]
     
