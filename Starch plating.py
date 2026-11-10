@@ -34,7 +34,7 @@ def add_parameters(parameters):
 
     parameters.add_float(
         variable_name="Z_offset_plate_2",
-        display_name="ZPlate in position 5",
+        display_name="Plate in position 5",
         description="Insert plate weight in grams",
         default=50,
         minimum=0,
