@@ -124,7 +124,7 @@ def run(protocol: protocol_api.ProtocolContext):
     # Load source plates (diluted cells)
     source_plates = []
     for i in range(NUM_DILUTION_PLATES):
-        source_plates.append(protocol.load_labware('corning_96_wellplate_360ul_flat', str(3+i)))
+        source_plates.append(protocol.load_labware('nest_96_wellplate_200ul_flat', str(3+i)))
     
     # Load destination plates (starch plates)
     dest_plates = [
