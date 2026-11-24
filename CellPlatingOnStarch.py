@@ -14,28 +14,19 @@ requirements = {
 def add_parameters(parameters):
 
     parameters.add_int(
-        variable_name="plate_count",
-        display_name="# of Plates (3 or 6 plates)",
-        description="Use multiples of 3 — round your actual number up to the next multiple of 3",
+        variable_name="transformant_count",
+        display_name="Number of transformants",
+        description="Starch plates are filled in slot order 5, 6, 7, 8, 9, 10. Dilution plates are set automatically.",
         default=6,
-        minimum=3,
-        maximum=6
-    )
-
-    parameters.add_int(
-        variable_name="dilution_plate_count",
-        display_name="# of Dilution Plates",
-        description="How many source plates with diluted cells? (1–2) positions 3 and 4",
-        default=2,
         minimum=1,
-        maximum=2
+        maximum=6
     )
 
 
     parameters.add_float(
         variable_name="Z_offset_plate_1",
-        display_name="Plate in position 5",
-        description="Insert plate weight in grams",
+        display_name="Plate in slot 5: weight (g)",
+        description="Weight of the poured plate, with the balance tared against an empty plate. Unused slots ignored.",
         default=50,
         minimum=0,
         maximum=100
@@ -43,8 +34,8 @@ def add_parameters(parameters):
 
     parameters.add_float(
         variable_name="Z_offset_plate_2",
-        display_name="Plate in position 6",
-        description="Insert plate weight in grams",
+        display_name="Plate in slot 6: weight (g)",
+        description="Weight of the poured plate, with the balance tared against an empty plate. Unused slots ignored.",
         default=50,
         minimum=0,
         maximum=100
@@ -52,8 +43,8 @@ def add_parameters(parameters):
 
     parameters.add_float(
         variable_name="Z_offset_plate_3",
-        display_name="Plate in position 7",
-        description="Insert plate weight in grams",
+        display_name="Plate in slot 7: weight (g)",
+        description="Weight of the poured plate, with the balance tared against an empty plate. Unused slots ignored.",
         default=50,
         minimum=0,
         maximum=100
@@ -61,8 +52,8 @@ def add_parameters(parameters):
 
     parameters.add_float(
         variable_name="Z_offset_plate_4",
-        display_name="Plate in position 8",
-        description="Insert plate weight in grams",
+        display_name="Plate in slot 8: weight (g)",
+        description="Weight of the poured plate, with the balance tared against an empty plate. Unused slots ignored.",
         default=50,
         minimum=0,
         maximum=100
@@ -70,8 +61,8 @@ def add_parameters(parameters):
 
     parameters.add_float(
         variable_name="Z_offset_plate_5",
-        display_name="Plate in position 9",
-        description="Insert plate weight in grams",
+        display_name="Plate in slot 9: weight (g)",
+        description="Weight of the poured plate, with the balance tared against an empty plate. Unused slots ignored.",
         default=50,
         minimum=0,
         maximum=100
@@ -79,8 +70,8 @@ def add_parameters(parameters):
 
     parameters.add_float(
         variable_name="Z_offset_plate_6",
-        display_name="Plate in position 10",
-        description="Insert plate weight in grams",
+        display_name="Plate in slot 10: weight (g)",
+        description="Weight of the poured plate, with the balance tared against an empty plate. Unused slots ignored.",
         default=50,
         minimum=0,
         maximum=100
@@ -111,9 +102,11 @@ def run(protocol: protocol_api.ProtocolContext):
     PLATEADJUSTED6 = PLATE6 / (GellanGumVolume)
     
 
-    NUM_DILUTION_PLATES = protocol.params.dilution_plate_count
+    NUM_TRANSFORMANTS = protocol.params.transformant_count
+    # Each dilution plate carries three series, one per transformant
+    NUM_DILUTION_PLATES = (NUM_TRANSFORMANTS + 2) // 3
 
-    plate_slots = get_plate_slot_list(protocol.params.plate_count)
+    plate_slots = get_plate_slot_list(NUM_TRANSFORMANTS)
     # Load labware
     tip_racks_20 = [
         protocol.load_labware('opentrons_96_filtertiprack_20ul', slot)
@@ -205,19 +198,18 @@ def run(protocol: protocol_api.ProtocolContext):
                           start_col-3,
                           dest_plate, [9, 10, 11], z_offset)
 
-    # Process each source plate
-    for plate_idx in range(NUM_DILUTION_PLATES):
-        source_plate = source_plates[plate_idx]
-        starch_plate_offset = plate_idx * 3
-        
-        # Process first group: A4-A1
-        process_four_columns(source_plate, 3, dest_plates[starch_plate_offset], 
-                           plate_z_offsets[starch_plate_offset])
-        
-        # Process second group: A8-A5
-        process_four_columns(source_plate, 7, dest_plates[starch_plate_offset + 1], 
-                           plate_z_offsets[starch_plate_offset + 1])
-        
-        # Process third group: A12-A9
-        process_four_columns(source_plate, 11, dest_plates[starch_plate_offset + 2], 
-                           plate_z_offsets[starch_plate_offset + 2])
+    # Column at which each of the three series of a dilution plate ends
+    SERIES_START_COLUMNS = [3, 7, 11]
+
+    protocol.comment(
+        f"Plating {NUM_TRANSFORMANTS} transformant(s) from {NUM_DILUTION_PLATES} "
+        f"dilution plate(s) onto starch plates in slot(s) {', '.join(plate_slots)}"
+    )
+
+    # Process one transformant at a time, so any number from 1 to 6 is allowed
+    for i in range(NUM_TRANSFORMANTS):
+        source_plate = source_plates[i // 3]
+        start_col = SERIES_START_COLUMNS[i % 3]
+        protocol.comment(f"Transformant {i + 1}: dilution plate {i // 3 + 1}, "
+                         f"series {i % 3 + 1}, starch plate in slot {plate_slots[i]}")
+        process_four_columns(source_plate, start_col, dest_plates[i], plate_z_offsets[i])
